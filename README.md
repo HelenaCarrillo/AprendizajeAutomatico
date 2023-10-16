@@ -5,3 +5,7 @@ En este repositorio se guardarán todas las tareas de la clase de Aprendizaje Au
 A continuación se muestra una lista de las tareas realizadas:
 * [Tarea 1. Regresión Lineal.](https://github.com/HelenaCarrillo/AprendizajeAutomatico/blob/main/Tarea1_RL.ipynb)
 * [Tarea 1. Datos seleccionados.](https://github.com/HelenaCarrillo/AprendizajeAutomatico/blob/main/Tarea1_datos.ipynb)
+* [Tarea 2](https://github.com/HelenaCarrillo/AprendizajeAutomatico/blob/main/Tarea2.ipynb)
+* [Tarea 3](https://github.com/HelenaCarrillo/AprendizajeAutomatico/blob/main/Tarea3.ipynb)
+* [Tarea 4](https://github.com/HelenaCarrillo/AprendizajeAutomatico/blob/main/Tarea4Colab.ipynb)
+* [Tarea 5]()
