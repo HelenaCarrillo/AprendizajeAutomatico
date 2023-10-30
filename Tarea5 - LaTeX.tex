@@ -1,0 +1,239 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{ifpdf,newtxtext,newtxmath} 
+\usepackage{array,graphicx,dcolumn,multirow,hevea,abstract,hanging,fancyhdr,float}
+
+% change next 3 lines each issue
+%\newcommand{\jref}{http://journal.sjdm.org/vol16.1.html}%
+\newcommand{\jhead}{Universidad Autónoma de Nuevo León}
+\newcommand{\jdate}{Octubre 2023}
+\topmargin=-.3in \oddsidemargin=.3in \evensidemargin=.3in \textheight=9in \textwidth=6in
+\pagestyle{fancy} 
+\fancyhead[L]{\protect\small \href{\jref}{\jhead}, \jdate}
+\fancyhead[R]{\protect\small MCD} % replace with running head
+\fancypagestyle{firstpage}{%
+ \lhead{\protect\small \href{\jref}{\jhead}, \jdate}
+ \rhead{}
+}
+\usepackage[labelfont=sc,textfont=sf]{caption}
+\usepackage[hyperfootnotes=false,breaklinks=true]{hyperref} % was dvipdfmx
+% \usepackage[hyperfootnotes=false,breaklinks=true,linkbordercolor={1 1 1},citebordercolor={1 1 1}]{hyperref}
+% \usepackage{natbib} % must come afer hyperfootnotes, use 2nd version for bibtex
+% \setlength{\bibsep}{0pt}
+\urlstyle{rm}
+\usepackage[hyphenbreaks]{breakurl}
+% DO NOT USE ADDITIONAL PACKAGES unless you make sure they work with Hevea.
+% You may define new commands, but these may cause other troubles, so try to avoid it.
+
+% FOR BIBTEX USERS (Bibtex is not recommended, but we can use it):
+\usepackage{natbib} % must come afer hypperref
+\bibliographystyle{apalike3}
+% in references: \bibliographystyle{apalike3} \setlength{\bibsep}{0pt} \bibliography{WHATEVER}
+% download http://journal.sjdm.org/apalike3.bst
+\usepackage{booktabs} % \toprule \midrule \bottomrule \cmidrule(lr){a-b}
+% define centered and ragged columns:
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }p{#1}} % can use m{}
+\newcolumntype{C}[1]{>{\centering\arraybackslash }p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash }p{#1}}
+\newcolumntype{d}[1]{D{.}{.}{#1}} % d{3.2} for 3 places on l, 2 on r
+\newcommand{\mc}{\multicolumn}
+\setlength\tabcolsep{1mm}
+\setlength\columnsep{5mm}
+\setlength\abovecaptionskip{1ex}
+\setlength\belowcaptionskip{.5ex}
+\setlength\belowbottomsep{.3ex}
+\setlength\lightrulewidth{.04em}
+\renewcommand\arraystretch{1.2}
+\renewcommand{\topfraction}{1}
+\renewcommand{\textfraction}{0}
+\renewcommand{\floatpagefraction}{.9}
+% \renewcommand{\baselinestretch}{1.00} \large\normalsize % for fixing spaces
+\widowpenalty=1000
+\clubpenalty=1000
+\setlength{\parskip}{0ex}
+\let\tempone\itemize
+\let\temptwo\enditemize
+\let\tempthree\enumerate
+\let\tempfour\endenumerate
+\renewenvironment{itemize}{\tempone\setlength{\itemsep}{0pt}}{\temptwo}
+\renewenvironment{enumerate}{\tempthree\setlength{\itemsep}{0pt}}{\tempfour}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{page}{1} % start with first page
+
+\title{Clasificación y Análisis de emisiones de Gases de Efecto Invernadero}
+
+\author{
+Helena Patricia Carrillo Soto\thanks{Facultad de Ciencias Fisico Matemáticas, Universidad Autónoma de Nuevo León (UANL). Email: helena.carrilloso@uanl.edu.mx}\
+}
+
+\date{} % leave empty
+\begin{document} % goes here
+
+%\begin{htmlonly}
+%\href{\jref}{\jhead}, \jdate, pp.\
+%\end{htmlonly}
+
+\maketitle
+\thispagestyle{firstpage}
+
+\begin{abstract}
+
+The abstract is a brief (usually one paragraph) summary
+of the whole paper, including the problem, the method for solving
+it (when not obvious), the results, and the conclusions suggested
+or drawn.  Do not write the abstract as a hasty
+afterthought. Profesor si está leyendo esto aun no escribo un abstract porque aun no tengo terminado el análisis.
+
+
+\smallskip
+\noindent
+Palabras clave: Gases de Efecto Invernadero, Aprendizaje No Supervisado, Machine Learning
+\end{abstract}
+
+
+\setlength{\baselineskip}{16pt plus.2pt}
+
+\section{Introducción}
+
+Los Gases de Efecto Invernadero (GEI) son los componentes de la atmósfera que absorben la radiación emitida por la superficie de la Tierra y la emiten de regreso. 
+
+Los principales GEI son el vapor de agua ($H_2O$), el dióxido de carbono ($CO_2$), el óxido nitroso ($N_2O$), el metano ($CH_4$) y el ozono ($O_3$). 
+
+También se encuentran GEI creados en su totalidad por el ser humano, como los halocarbonos (CFCs, HCFCs, HFCs y PFCs) los cuales contienen cloro, bromo o flúor y carbono. Estos compuestos son una de las causas del agotamiento de la capa de ozono en la atmósfera.
+
+%https://d1wqtxts1xzle7.cloudfront.net/50544101/Gases_de_Efecto_Invernadero_y_el_Cambio_Climatico-libre.pdf?1480106247=&response-content-disposition=inline%3B+filename%3DINFORMACION_TECNICA_SOBRE_GASES_DE_EFECT.pdf&Expires=1698606446&Signature=QHcB~pmvbMwzk-NRtje6jK-v9mkpoRZV9f18zETHXFSso-PGBmwNMG82mYGLUms40MDtv5TwkmfTc05-xHPMUYTOEdMqcx9JiUjTUuIal5LHhX8ik4NVYuMtxMnsDLkqnIZenaVnTDMzkxXBn4FwUSJWX~ReU-MULbqBaYjiAH0EBi4T7KId7RC0EGdsR7V04dMtsJlw4YyZL1L33LNCBdZqciotjzsTfc95KlpKTjTB42Ge3d57l0z5B2gdid6ZFyai9XvDJgJ0ZnAS7m1BEwDtJlBJ2bpvMaX0bDpYECJnWVUUY8r-MG8Pm-0RuJf4HlGc0at2ofwbViJaSGwYEg__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA%
+
+Los Gases de Efecto Invernadero están directamente relacionados con el calentamiento global y este a su vez con el cambio climático. 
+
+Este tema ha cobrado relevancia en los último años con el rápido aumento de la temperatura media global, los intentos fallidos de distintos gobiernos de reducir sus emisiones y la llamada de cientificos alrededor del mundo de tomar medidas urgentes para controlar el cambio climático.
+
+\section{Metodología y Datos} % example of a heading
+
+En el presente trabajo se utilizarán métodos de Machine Learning para analizar los datos correspondientes al Inventario Nacional de Emisiones de Gases y Compuestos de Efecto Invernadero del INECC que se puede encontrar en la siguiente \href{https://datos.gob.mx/busca/dataset/inventario-nacional-de-emisiones-de-gases-y-compuestos-de-efecto-invernadero-inegycei.}{liga} .
+
+Los datos consisten en las emisiones anuales totales, y desglosadas por industria, de los diferentes gases de efecto invernadero para los años de 1990 a 2021.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Aprendizaje No Supervisado}
+
+El aprendizaje no supervisado, usa algoritmos de machine learning para analizar y clasificar datos no etiquetados. 
+
+Se utilizan principalmente para encontrar patrones ocultos en los datos.
+
+\subsection{K-Means}
+
+El algoritmo K-means es un método popular de clustering por aprendizaje no supervisado.
+
+El algoritmo se basa en agrupar los datos en \textit{k} grupos en base a su media.
+
+En él asumimos que se tiene un set de objetos $D =\left\lbrace\ p_1, p_2, \ldots, p_n \right\rbrace$ donde cada objeto $p_i =\left\lbrace\ p_{i1}, p_{i2}, \ldots, p_{in} \right\rbrace$ representa un punto en el espacio $R^m$ donde \textit{m} es el número de atributos o dimensiones de los objetos del set D. 
+
+Se define \textit{k} como el número de clusters y $m_k$ la media del cluster $C_k$. El objetivo general del método es minimizar la función criterio $e(k)$ . 
+
+Normalmente la función criterio que se minimiza es la suma de cuadrados del error:
+
+\[e(k) = \sum_{i=1}^{k} \sum_{p_j \in C_i}^{} dist(p_j , m_i)^2 \]
+donde 
+
+$p_j$ - punto en el espacio $R^m$ que reoresenta el punto $p_j$ .
+
+$m_i$ - media del cluster $C_i$ .
+
+$ dist(p_j , m_i)$ - distancia Euclidiana del punto $p_j$ a la media (centro) del cluster más cercano $C_i$ . 
+
+%%%% https://www.sciencedirect.com/science/article/pii/S1309104215305754#bib32 %%%%%%
+
+
+\subsection{K-means en el análisis de GEI}
+El algoritmo de K-means se ha usado para el análisis de emisiones de Gases de Efecto invernadero en múltiples ocasiones.
+
+\href{https://www.sciencedirect.com/science/article/pii/S1309104215305754?via%3Dihub}{Anna Kijewska y Anna Bluszcz} hicieron uso de él en 2016 para analizar los niveles de emisiones de GEI variantes en paises de Europa. \citep{KIJEWSKA2016935}
+
+En 2018, \href{http://sedici.unlp.edu.ar/handle/10915/72763}{Lozza y Bellini} lo utilizaron para clasificar sistemas ganaderos para estimaciones de GEI. \citep{lozza2018clasificacion}
+
+En esta ocasión se usará el algoritmo para categorizar las actividades que aportan al total de emisiones de Gases de Efecto Invernadero en México de los años de 1990 a 2021.
+
+
+\subsection{Resultados análisis K-means}
+Para establecer el número de clusters a utilizar se utilizó el método del codo en el cuál se calcula la suma de las distancias al cuadrado para diferentes valores de k y se busca el valor de k donde la disminución en la suma se realentiza o se acerca a su límite. 
+
+El resultado obtenido fue el siguiente:
+
+
+Para tener un criterio más claro se puede calcular la distancia entre la recta creada por el mínimo y máximo número de clusters y sabemos que se optimiza $k$ en el número que tenga una mayor distancia a la recta:
+
+En base a esto se usan 4 clústers.
+
+Los resultados arrojan los siguientes centros:
+
+\begin{table}[h]\centering
+\caption{Centros: Puntos donde se encuentran los centros de cada uno de los clusters $C_k$.}
+
+\begin{tabular}{ccccccccc}
+\hline
+\textbf{$C_k$} & \textbf{x} & \textbf{y} & \textbf{z} & \textbf{w} & \textbf{v} & \textbf{u} & \textbf{r} & \textbf{s} \\ \hline
+\textbf{1}       & -0.0907  & -0.0822  & -0.0089  & 0.0020   & -0.0469  & 0.0019   & 0.0019   & -0.1110  \\
+\textbf{2}       & -0.1175  & 10.6739  & -0.1918  & -0.0760  & -0.0551  & -0.0724  & -0.0724  & 3.0160   \\
+\textbf{3}       & 5.7762   & -0.1407  & 0.6824   & -0.0760  & -0.0551  & -0.0724  & -0.0724  & 5.4903   \\
+\textbf{4}       & -0.1129  & -0.1810  & -0.1918  & -0.0760  & 19.3721  & -0.0724  & -0.0724  & -0.1575  \\ \hline
+\end{tabular}
+\end{table}
+
+También se obtienen los tamaños de grupo:
+
+\begin{table}[h]\centering
+\caption{Tamaño: Tamaño de cada uno de los clusters $C_k$.}
+\begin{tabular}{cc}
+\hline
+\textbf{Cluster} & \textbf{nk} \\ \hline
+\textbf{1}       & 4022        \\
+\textbf{2}       & 32          \\
+\textbf{3}       & 64          \\
+\textbf{4}       & 10          \\ \hline
+\end{tabular}
+\end{table}
+
+Debido a que el espacio es de 8 dimensiones solo se muestran algunas caras:
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Apendizaje Supervisado}
+
+A diferencia del aprendizaje no supervisado, el aprendizaje supervisado utiliza datos etiquetados. Este utiliza datos de entrenamiento para enseñar a los modelos a generar la salida deseada.
+
+\subsection{Modelos de aprendizaje supervisado en el análisis de GEI}
+
+Distintos modelos de aprendizaje supervisado se han usado a lo largo del tiempo para analizar emisiones de Gases de Efecto Invernadero.
+
+
+
+\subsection{Análisis y Resultados}
+
+You can make lists with automatic numbering \dots
+
+\begin{enumerate}
+\item Like this,
+\item and like this.
+\end{enumerate}
+\dots or bullet points \dots
+\begin{itemize}
+\item Like this,
+\item and like this.
+\end{itemize}
+
+References should be in APA style. Examples are below.
+
+% FOR BIBTEX USERS INSTEAD OF REFERENCES SECTION
+%\bibliographystyle{apalike3}
+%\bibliography{bibliography.bib}
+% OR CAN ALSO INCLUDE THE BBL FILE AFTER THE NEXT LINE, INSTEAD OF THE LAST LINE
+
+\bibliography{biblio}
+
+\end{document} 
