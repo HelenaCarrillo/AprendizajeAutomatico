@@ -1,0 +1,286 @@
+\documentclass[13.6pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{ifpdf,newtxtext,newtxmath} 
+\usepackage{array,graphicx,dcolumn,multirow,hevea,abstract,hanging,fancyhdr,float}
+
+% change next 3 lines each issue
+%\newcommand{\jref}{http://journal.sjdm.org/vol16.1.html}%
+\newcommand{\jhead}{Universidad Autónoma de Nuevo León}
+\newcommand{\jdate}{Octubre 2023}
+\topmargin=-.3in \oddsidemargin=.3in \evensidemargin=.3in \textheight=9in \textwidth=6in
+\pagestyle{fancy} 
+\fancyhead[L]{\protect\small \href{\jref}{\jhead}, \jdate}
+\fancyhead[R]{\protect\small MCD} % replace with running head
+\fancypagestyle{firstpage}{%
+ \lhead{\protect\small \href{\jref}{\jhead}, \jdate}
+ \rhead{}
+}
+\usepackage[labelfont=sc,textfont=sf]{caption}
+\usepackage[hyperfootnotes=false,breaklinks=true]{hyperref} % was dvipdfmx
+% \usepackage[hyperfootnotes=false,breaklinks=true,linkbordercolor={1 1 1},citebordercolor={1 1 1}]{hyperref}
+% \usepackage{natbib} % must come afer hyperfootnotes, use 2nd version for bibtex
+% \setlength{\bibsep}{0pt}
+\urlstyle{rm}
+\usepackage[hyphenbreaks]{breakurl}
+% DO NOT USE ADDITIONAL PACKAGES unless you make sure they work with Hevea.
+% You may define new commands, but these may cause other troubles, so try to avoid it.
+
+% FOR BIBTEX USERS (Bibtex is not recommended, but we can use it):
+\usepackage{natbib} % must come afer hypperref
+\bibliographystyle{apalike}
+% in references: \bibliographystyle{apalike3} \setlength{\bibsep}{0pt} \bibliography{WHATEVER}
+% download http://journal.sjdm.org/apalike3.bst
+\usepackage{booktabs} % \toprule \midrule \bottomrule \cmidrule(lr){a-b}
+% define centered and ragged columns:
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }p{#1}} % can use m{}
+\newcolumntype{C}[1]{>{\centering\arraybackslash }p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash }p{#1}}
+\newcolumntype{d}[1]{D{.}{.}{#1}} % d{3.2} for 3 places on l, 2 on r
+\newcommand{\mc}{\multicolumn}
+\setlength\tabcolsep{1mm}
+\setlength\columnsep{5mm}
+\setlength\abovecaptionskip{1ex}
+\setlength\belowcaptionskip{.5ex}
+\setlength\belowbottomsep{.3ex}
+\setlength\lightrulewidth{.04em}
+\renewcommand\arraystretch{1.2}
+\renewcommand{\topfraction}{1}
+\renewcommand{\textfraction}{0}
+\renewcommand{\floatpagefraction}{.9}
+% \renewcommand{\baselinestretch}{1.00} \large\normalsize % for fixing spaces
+\widowpenalty=1000
+\clubpenalty=1000
+\setlength{\parskip}{0ex}
+\let\tempone\itemize
+\let\temptwo\enditemize
+\let\tempthree\enumerate
+\let\tempfour\endenumerate
+\renewenvironment{itemize}{\tempone\setlength{\itemsep}{0pt}}{\temptwo}
+\renewenvironment{enumerate}{\tempthree\setlength{\itemsep}{0pt}}{\tempfour}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{page}{1} % start with first page
+
+\title{Clasificación y Análisis de emisiones de Gases de Efecto Invernadero}
+
+\author{
+Helena Patricia Carrillo Soto\thanks{Facultad de Ciencias Fisico Matemáticas, Universidad Autónoma de Nuevo León (UANL). Email: helena.carrilloso@uanl.edu.mx}\
+}
+
+\date{} % leave empty
+\begin{document} % goes here
+
+%\begin{htmlonly}
+%\href{\jref}{\jhead}, \jdate, pp.\
+%\end{htmlonly}
+
+\maketitle
+\thispagestyle{firstpage}
+
+\begin{abstract}
+
+The abstract is a brief (usually one paragraph) summary
+of the whole paper, including the problem, the method for solving
+it (when not obvious), the results, and the conclusions suggested
+or drawn.  Do not write the abstract as a hasty
+afterthought. Profesor si está leyendo esto aun no escribo un abstract porque aun no tengo terminado el análisis.
+
+
+\smallskip
+\noindent
+Palabras clave: Gases de Efecto Invernadero, Aprendizaje No Supervisado, Machine Learning
+\end{abstract}
+
+
+\setlength{\baselineskip}{16pt plus.2pt}
+
+\section{Introducción}
+
+Los Gases de Efecto Invernadero (GEI) son los componentes de la atmósfera que absorben la radiación emitida por la superficie de la Tierra y la emiten de regreso. 
+
+Los principales GEI son el vapor de agua ($H_2O$), el dióxido de carbono ($CO_2$), el óxido nitroso ($N_2O$), el metano ($CH_4$) y el ozono ($O_3$). 
+
+También se encuentran GEI creados en su totalidad por el ser humano, como los halocarbonos (CFCs, HCFCs, HFCs y PFCs) los cuales contienen cloro, bromo o flúor y carbono. Estos compuestos son una de las causas del agotamiento de la capa de ozono en la atmósfera. \citep{ballesteros2007informacion} .
+
+Los Gases de Efecto Invernadero están directamente relacionados con el calentamiento global y este a su vez con el cambio climático. 
+
+Este tema ha cobrado relevancia en los último años con el rápido aumento de la temperatura media global, los intentos fallidos de distintos gobiernos de reducir sus emisiones y la llamada de cientificos alrededor del mundo de tomar medidas urgentes para controlar el cambio climático.
+
+\section{Metodología y Datos} % example of a heading
+
+En el presente trabajo se utilizarán métodos de Machine Learning para analizar los datos correspondientes al Inventario Nacional de Emisiones de Gases y Compuestos de Efecto Invernadero del INECC que se puede encontrar en la siguiente \href{https://datos.gob.mx/busca/dataset/inventario-nacional-de-emisiones-de-gases-y-compuestos-de-efecto-invernadero-inegycei.}{liga} .
+
+Los datos consisten en las emisiones anuales totales, y desglosadas por industria, de los diferentes gases de efecto invernadero para los años de 1990 a 2021.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Aprendizaje No Supervisado}
+
+El aprendizaje no supervisado, usa algoritmos de machine learning para analizar y clasificar datos no etiquetados. 
+
+Se utilizan principalmente para encontrar patrones ocultos en los datos.
+
+\subsection{K-Means}
+
+El algoritmo K-means es un método popular de clustering por aprendizaje no supervisado.
+
+El algoritmo se basa en agrupar los datos en \textit{k} grupos en base a su media.
+
+En él asumimos que se tiene un set de objetos $D =\left\lbrace\ p_1, p_2, \ldots, p_n \right\rbrace$ donde cada objeto $p_i =\left\lbrace\ p_{i1}, p_{i2}, \ldots, p_{in} \right\rbrace$ representa un punto en el espacio $R^m$ donde \textit{m} es el número de atributos o dimensiones de los objetos del set D. 
+
+Se define \textit{k} como el número de clusters y $m_k$ la media del cluster $C_k$. El objetivo general del método es minimizar la función criterio $e(k)$ . 
+
+Normalmente la función criterio que se minimiza es la suma de cuadrados del error:
+
+\[e(k) = \sum_{i=1}^{k} \sum_{p_j \in C_i}^{} dist(p_j , m_i)^2 \]
+donde 
+
+$p_j$ - punto en el espacio $R^m$ que reoresenta el punto $p_j$ .
+
+$m_i$ - media del cluster $C_i$ .
+
+$ dist(p_j , m_i)$ - distancia Euclidiana del punto $p_j$ a la media (centro) del cluster más cercano $C_i$ . 
+
+\citep{KIJEWSKA2016935}
+
+
+
+\subsection{K-means en el análisis de GEI}
+El algoritmo de K-means se ha usado para el análisis de emisiones de Gases de Efecto invernadero en múltiples ocasiones.
+
+Anna Kijewska y Anna Bluszcz hicieron uso de él en 2016 para analizar los niveles de emisiones de GEI variantes en paises de Europa. \citep{KIJEWSKA2016935}
+
+En 2018, Lozza y Bellini lo utilizaron para realizar la clasificación de sistemas ganaderos para estimaciones de GEI. \citep{lozza2018clasificacion}
+
+En esta ocasión se usará el algoritmo para categorizar las actividades que aportan al total de emisiones de Gases de Efecto Invernadero en México de los años de 1990 a 2021.
+
+
+\subsection{Resultados análisis K-means}
+Para establecer el número de clusters a utilizar se utilizó el método del codo en el cuál se calcula la suma de las distancias al cuadrado para diferentes valores de k y se busca el valor de k donde la disminución en la suma se realentiza o se acerca a su límite. 
+
+El resultado obtenido se puede ver en la Figura \ref{fig: codo}:
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Imagenes/descarga.jpg}
+\caption{Método del codo}
+\label{fig: codo}
+\end{figure}
+
+Para tener un criterio más claro se puede calcular la distancia entre la recta creada por el mínimo y máximo número de clusters y sabemos que se optimiza $k$ en el número que tenga una mayor distancia a la recta. Podemos observarlo en la Figura \ref{fig: cododist}.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Imagenes/descarga (2).png}
+\caption{Método del codo con distancias}
+\label{fig: cododist}
+\end{figure}
+
+En base a esto se usan 4 clústers.
+
+
+Los resultados arrojan los centros encontrados en la Tabla \ref{table:tabkcentros}:
+
+\begin{table}[h]\centering
+\caption{Centros: Puntos donde se encuentran los centros de cada uno de los clusters $C_k$.}
+\label{table:tabkcentros}
+\begin{tabular}{ccccccccc}
+\hline
+\textbf{$C_k$} & \textbf{x} & \textbf{y} & \textbf{z} & \textbf{w} & \textbf{v} & \textbf{u} & \textbf{r} & \textbf{s} \\ \hline
+\textbf{1}       & -0.0907  & -0.0822  & -0.0089  & 0.0020   & -0.0469  & 0.0019   & 0.0019   & -0.1110  \\
+\textbf{2}       & -0.1175  & 10.6739  & -0.1918  & -0.0760  & -0.0551  & -0.0724  & -0.0724  & 3.0160   \\
+\textbf{3}       & 5.7762   & -0.1407  & 0.6824   & -0.0760  & -0.0551  & -0.0724  & -0.0724  & 5.4903   \\
+\textbf{4}       & -0.1129  & -0.1810  & -0.1918  & -0.0760  & 19.3721  & -0.0724  & -0.0724  & -0.1575  \\ \hline
+\end{tabular}
+\end{table}
+
+También se obtienen los tamaños de grupo mostrados en la Tabla \ref{table: noelementos}:
+
+\begin{table}[h]\centering
+\caption{Tamaño: Tamaño de cada uno de los clusters $C_k$.}
+
+\begin{tabular}{cc}
+\hline
+\textbf{Cluster} & \textbf{nk} \\ \hline
+\textbf{1}       & 4022        \\
+\textbf{2}       & 32          \\
+\textbf{3}       & 64          \\
+\textbf{4}       & 10          \\ \hline
+\end{tabular}
+\label{table: noelementos}
+\end{table}
+
+Debido a que el espacio es de 8 dimensiones solo se muestran una de las caras en la Figura \ref{fig: CO2VCH4}.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Imagenes/descarga (4).png}
+\caption{Clusters de CO2 vs CH4}
+\label{fig: CO2VCH4}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Apendizaje Supervisado}
+
+A diferencia del aprendizaje no supervisado, el aprendizaje supervisado utiliza datos etiquetados. Este utiliza datos de entrenamiento para enseñar a los modelos a generar la salida deseada.
+
+\subsection{Modelos de aprendizaje supervisado en el análisis de GEI}
+
+Distintos modelos de aprendizaje supervisado se han usado a lo largo del tiempo para analizar emisiones de Gases de Efecto Invernadero.
+
+Zewei Jiang y Shihong Yang junto con otros investigadores usaron los modelos de Random Forest (RF), regresiones K-Nearest Neighbor (KNN), regresiones Gradient Boosting(GBR), y regresiones Lineares (LR), así como modelos stacking, para modelar emisiones de GEI en diferentes escalas de tiempo de campos de arroz. \citep{JIANG2023108821} .
+
+Por otro lado, Sabrina Hempel y Julian Adolph junto con su equipo usaron regresiones Gradient Boosting, Random Forests y regresiones lineares múltiples, regresiones Ridge regression (Ridge), una red neuronal con una capa oculta así como Support Vector Machines (SVM) y procesos Gaussianos para evaluar las emisiones de metano de un edificio lechero con ventilación natural. \citep{app10196938}
+
+
+\subsection{Análisis y Resultados}
+
+Para este estudio primero se analizaron diferentes modelos de los encontrados en la literatura para evaluar cuál de ellos era el de mejor desempeño. Se usó RMSE (Root Mean Squared Error) para compararlos.
+
+Los modelos usados fueron:
+
+\begin{itemize}
+\item Bayesian Ridge (BR)
+\item Gradient Boosting (GBR)
+\item Regresión Linear (LR)
+\item Random Forest (RF)
+\item K-Nearest Neighbor (KNN)
+\item Regresor Stacking usando GBR y RF
+\end{itemize}
+
+
+Todos se revisaron un total de 10 veces y los mejores 20 resultados fueron los presentados en la Tabla \ref{table:mejores20}:
+
+\begin{table}[h] \centering
+\caption{Mejores 20 resultados de pruebas de regresiones por RMSE}
+\label{table:mejores20}
+\begin{tabular}{llll}
+\hline
+\textbf{} & \multicolumn{1}{c}{\textbf{Modelo}} & \multicolumn{1}{c}{\textbf{RMSE}} & \multicolumn{1}{c}{\textbf{Tiempo}} \\ \hline
+1         & LinearReg       & 8.717637e-16  & 0.014209        \\
+2         & LinearReg       & 1.206522e-15  & 0.002382        \\
+3         & LinearReg       & 1.242156e-15  & 0.007742        \\
+4         & LinearReg       & 1.269252e-15  & 0.003934        \\
+5         & LinearReg       & 1.518410e-15  & 0.004000        \\
+6         & LinearReg       & 1.524309e-15  & 0.002510        \\
+7         & LinearReg       & 1.551162e-15  & 0.003907        \\
+8         & LinearReg       & 1.640076e-15  & 0.002428        \\
+9         & LinearReg       & 1.782332e-15  & 0.002427        \\
+10        & LinearReg       & 2.923362e-15  & 0.008730        \\
+11        & BayesRidge      & 9.344281e-08  & 0.007534        \\
+12        & BayesRidge      & 9.438717e-08  & 0.002169        \\
+13        & BayesRidge      & 1.188605e-07  & 0.003024        \\
+14        & BayesRidge      & 1.465989e-07  & 0.002062        \\
+15        & BayesRidge      & 1.574630e-07  & 0.003200        \\
+16        & BayesRidge      & 1.631492e-07  & 0.003612        \\
+17        & BayesRidge      & 1.832583e-07  & 0.010631        \\
+18        & BayesRidge      & 2.056415e-07  & 0.003067        \\
+19        & BayesRidge      & 2.430986e-07  & 0.002257        \\
+20        & BayesRidge      & 4.581878e-07  & 0.003622        \\ \hline
+\end{tabular}
+\end{table}
+
+
+\newpage
+\bibliography{biblio}
+
+\end{document} 
