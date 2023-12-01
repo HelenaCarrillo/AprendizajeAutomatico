@@ -1,0 +1,287 @@
+\documentclass[13.6pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{ifpdf,newtxtext,newtxmath} 
+\usepackage{array,graphicx,dcolumn,multirow,hevea,abstract,hanging,fancyhdr,float}
+
+% change next 3 lines each issue
+%\newcommand{\jref}{http://journal.sjdm.org/vol16.1.html}%
+\newcommand{\jhead}{Universidad Autónoma de Nuevo León}
+\newcommand{\jdate}{Octubre 2023}
+\topmargin=-.3in \oddsidemargin=.3in \evensidemargin=.3in \textheight=9in \textwidth=6in
+\pagestyle{fancy} 
+\fancyhead[L]{\protect\small \href{\jref}{\jhead}, \jdate}
+\fancyhead[R]{\protect\small MCD} % replace with running head
+\fancypagestyle{firstpage}{%
+ \lhead{\protect\small \href{\jref}{\jhead}, \jdate}
+ \rhead{}
+}
+\usepackage[labelfont=sc,textfont=sf]{caption}
+\usepackage[hyperfootnotes=false,breaklinks=true]{hyperref} % was dvipdfmx
+% \usepackage[hyperfootnotes=false,breaklinks=true,linkbordercolor={1 1 1},citebordercolor={1 1 1}]{hyperref}
+% \usepackage{natbib} % must come afer hyperfootnotes, use 2nd version for bibtex
+% \setlength{\bibsep}{0pt}
+\urlstyle{rm}
+\usepackage[hyphenbreaks]{breakurl}
+% DO NOT USE ADDITIONAL PACKAGES unless you make sure they work with Hevea.
+% You may define new commands, but these may cause other troubles, so try to avoid it.
+
+% FOR BIBTEX USERS (Bibtex is not recommended, but we can use it):
+\usepackage{natbib} % must come afer hypperref
+\bibliographystyle{apalike}
+% in references: \bibliographystyle{apalike3} \setlength{\bibsep}{0pt} \bibliography{WHATEVER}
+% download http://journal.sjdm.org/apalike3.bst
+\usepackage{booktabs} % \toprule \midrule \bottomrule \cmidrule(lr){a-b}
+% define centered and ragged columns:
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }p{#1}} % can use m{}
+\newcolumntype{C}[1]{>{\centering\arraybackslash }p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash }p{#1}}
+\newcolumntype{d}[1]{D{.}{.}{#1}} % d{3.2} for 3 places on l, 2 on r
+\newcommand{\mc}{\multicolumn}
+\setlength\tabcolsep{1mm}
+\setlength\columnsep{5mm}
+\setlength\abovecaptionskip{1ex}
+\setlength\belowcaptionskip{.5ex}
+\setlength\belowbottomsep{.3ex}
+\setlength\lightrulewidth{.04em}
+\renewcommand\arraystretch{1.2}
+\renewcommand{\topfraction}{1}
+\renewcommand{\textfraction}{0}
+\renewcommand{\floatpagefraction}{.9}
+% \renewcommand{\baselinestretch}{1.00} \large\normalsize % for fixing spaces
+\widowpenalty=1000
+\clubpenalty=1000
+\setlength{\parskip}{0ex}
+\let\tempone\itemize
+\let\temptwo\enditemize
+\let\tempthree\enumerate
+\let\tempfour\endenumerate
+\renewenvironment{itemize}{\tempone\setlength{\itemsep}{0pt}}{\temptwo}
+\renewenvironment{enumerate}{\tempthree\setlength{\itemsep}{0pt}}{\tempfour}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{page}{1} % start with first page
+
+\title{Clasificación y análisis de emisiones de gases de efecto invernadero}
+
+\author{
+Helena Patricia Carrillo Soto\thanks{Facultad de Ciencias Fisico Matemáticas, Universidad Autónoma de Nuevo León (UANL). Email: helena.carrilloso@uanl.edu.mx}\
+}
+
+\date{} % leave empty
+\begin{document} % goes here
+
+%\begin{htmlonly}
+%\href{\jref}{\jhead}, \jdate, pp.\
+%\end{htmlonly}
+
+\maketitle
+\thispagestyle{firstpage}
+
+\begin{abstract}
+
+Se utilizaron métodos de aprendizaje de máquina no supervisado y supervisado para analizar datos de emisiones de gases de efecto invernadero. Se utiliza el algoritmo de $k$-medias para separar las emisiones en cuatro grupos y se revisan un conjunto de modelos para encontrar el que mejor se ajusta para predicciones futuras resultando en una cresta bayesiana como mejor modelo elegido.
+
+
+\smallskip
+\noindent
+Palabras clave: gases de efecto invernadero, aprendizaje no supervisado, aprendizaje de máquina
+\end{abstract}
+
+
+\setlength{\baselineskip}{16pt plus.2pt}
+
+\section{Introducción}
+
+Los gases de efecto invernadero (GEI) son los componentes de la atmósfera que absorben la radiación emitida por la superficie de la Tierra y la emiten de regreso. 
+
+Los principales GEI son el vapor de agua (H$_2$O), el dióxido de carbono (CO$_2$), el óxido nitroso (N$_2$O), el metano (CH$_4$) y el ozono (O$_3$). 
+
+También se encuentran GEI creados en su totalidad por el ser humano, como los halocarbonos (CFCs, HCFCs, HFCs y PFCs) los cuales contienen cloro, bromo o flúor y carbono. Estos compuestos son una de las causas del agotamiento de la capa de ozono en la atmósfera \citep{ballesteros2007informacion} .
+
+Los GEI están directamente relacionados con el calentamiento global y este a su vez con el cambio climático. 
+
+Este tema ha cobrado relevancia en los último años con el rápido aumento de la temperatura media global, los intentos fallidos de distintos gobiernos de reducir sus emisiones y la llamada de científicos alrededor del mundo de tomar medidas urgentes para controlar el cambio climático.
+
+\section{Metodología y Datos} % example of a heading
+
+En el presente trabajo se utilizarán métodos de aprendizaje de máquina para analizar los datos correspondientes al "Inventario Nacional de Emisiones de Gases y Compuestos de Efecto Invernadero" del INECC que se puede encontrar en la siguiente liga: \href{https://datos.gob.mx/busca/dataset/inventario-nacional-de-emisiones-de-gases-y-compuestos-de-efecto-invernadero-inegycei.}{https://datos.gob.mx/busca/dataset/inventario-nacional-de-emisiones-de-gases-y-compuestos-de-efecto-invernadero-inegycei}.
+
+Los datos consisten en las emisiones anuales totales, y desglosadas por industria, de los diferentes GEI para los años de 1990 a 2021.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Aprendizaje no supervisado}
+
+El aprendizaje no supervisado, usa algoritmos de aprendizaje de máquina para analizar y clasificar datos no etiquetados. 
+
+Se utilizan principalmente para encontrar patrones ocultos en los datos.
+
+\subsection{$K$-medias}
+
+El algoritmo $K$-medias es un método popular de agrupamiento por aprendizaje no supervisado.
+
+El algoritmo se basa en agrupar los datos en \textit{k} grupos en base a su media.
+
+En él asumimos que se tiene un conjunto de objetos $D =\left\lbrace\ p_1, p_2, \ldots, p_n \right\rbrace$ donde cada objeto $p_i =\left\lbrace\ p_{i1}, p_{i2}, \ldots, p_{in} \right\rbrace$ representa un punto en el espacio $R^m$ donde \textit{m} es el número de atributos o dimensiones de los objetos del conjunto D. 
+
+Se define \textit{k} como el número de grupos y $m_k$ la media del grupo $C_k$. El objetivo general del método es minimizar la función criterio $e(k)$ . 
+
+Normalmente la función criterio que se minimiza es la suma de cuadrados del error:
+
+\[e(k) = \sum_{i=1}^{k} \sum_{p_j \in C_i}^{} dist(p_j , m_i)^2 \]
+donde 
+
+$p_j$ - punto en el espacio $R^m$ que representa el punto $p_j$ ,
+
+$m_i$ - media del grupo $C_i$ ,
+
+$ dist(p_j , m_i)$ - distancia Euclidiana del punto $p_j$ a la media (centro) del grupo más cercano $C_i$  
+
+\citep{KIJEWSKA2016935}.
+
+
+
+\subsection{$K$-medias en el análisis de GEI}
+El algoritmo de $K$-medias se ha usado para el análisis de emisiones de GEI en múltiples ocasiones.
+
+Anna Kijewska y Anna Bluszcz hicieron uso de él en 2016 para analizar los niveles de emisiones de GEI variantes en países de Europa \citep{KIJEWSKA2016935}
+
+En 2018, Lozza y Bellini lo utilizaron para realizar la clasificación de sistemas ganaderos para estimaciones de GEI \citep{lozza2018clasificacion}
+
+En esta ocasión se usará el algoritmo para categorizar las actividades que aportan al total de emisiones de GEI en México de los años de 1990 a 2021.
+
+
+\subsection{Resultados análisis $K$-medias}
+Para establecer el número de grupos a utilizar se utilizó el método del codo en el cuál se calcula la suma de las distancias al cuadrado para diferentes valores de $k$ y se busca el valor de $k$ donde la disminución en la suma se ralentiza o se acerca a su límite. 
+
+El resultado obtenido se puede ver en la figura \ref{fig: codo} (p. \pageref{fig: codo}):
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Imagenes/descarga.jpg}
+\caption{Método del codo}
+\label{fig: codo}
+\end{figure}
+
+Para tener un criterio más claro se puede calcular la distancia entre la recta creada por el mínimo y máximo número de grupos y sabemos que se optimiza $k$ en el número que tenga una mayor distancia a la recta. Podemos observarlo en la figura \ref{fig: cododist} (p.\pageref{fig: cododist}).
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Imagenes/descarga (2).png}
+\caption{Método del codo con distancias}
+\label{fig: cododist}
+\end{figure}
+
+En base a esto se usan 4 grupos.
+
+
+Los resultados arrojan los centros encontrados en la tabla \ref{table:tabkcentros} (p.\pageref{table:tabkcentros}):
+
+\begin{table}[h]\centering
+\caption{Centros: Puntos donde se encuentran los centros de cada uno de los grupos $C_k$.}
+\label{table:tabkcentros}
+\begin{tabular}{ccccccccc}
+\hline
+\textbf{$C_k$} & \textbf{x} & \textbf{y} & \textbf{z} & \textbf{w} & \textbf{v} & \textbf{u} & \textbf{r} & \textbf{s} \\ \hline
+\textbf{1}       & -0.0907  & -0.0822  & -0.0089  & 0.0020   & -0.0469  & 0.0019   & 0.0019   & -0.1110  \\
+\textbf{2}       & -0.1175  & 10.6739  & -0.1918  & -0.0760  & -0.0551  & -0.0724  & -0.0724  & 3.0160   \\
+\textbf{3}       & 5.7762   & -0.1407  & 0.6824   & -0.0760  & -0.0551  & -0.0724  & -0.0724  & 5.4903   \\
+\textbf{4}       & -0.1129  & -0.1810  & -0.1918  & -0.0760  & 19.3721  & -0.0724  & -0.0724  & -0.1575  \\ \hline
+\end{tabular}
+\end{table}
+
+También se obtienen los tamaños de grupo mostrados en la tabla \ref{table: noelementos} (p.\pageref{table: noelementos}):
+
+\begin{table}[h]\centering
+\caption{Tamaño: Tamaño de cada uno de los grupos $C_k$.}
+
+\begin{tabular}{cc}
+\hline
+\textbf{Grupo} & \textbf{nk} \\ \hline
+\textbf{1}       & 4022        \\
+\textbf{2}       & 32          \\
+\textbf{3}       & 64          \\
+\textbf{4}       & 10          \\ \hline
+\end{tabular}
+\label{table: noelementos}
+\end{table}
+
+Debido a que el espacio es de 8 dimensiones solo se muestran una de las caras en la figura \ref{fig: CO2VCH4} (p.\pageref{fig: CO2VCH4}).
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Imagenes/descarga (4).png}
+\caption{Grupos de CO$_2$ vs CH$_4$}
+\label{fig: CO2VCH4}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Aprendizaje supervisado}
+
+A diferencia del aprendizaje no supervisado, el aprendizaje supervisado utiliza datos etiquetados. Este utiliza datos de entrenamiento para enseñar a los modelos a generar la salida deseada.
+
+\subsection{Modelos de aprendizaje supervisado en el análisis de GEI}
+
+Distintos modelos de aprendizaje supervisado se han usado a lo largo del tiempo para analizar emisiones de Gases de Efecto Invernadero.
+
+Zewei Jiang y Shihong Yang junto con otros investigadores usaron los modelos de bosques aleatorios (por sus siglas en inglés, RF), regresiones $K$-vecino mas cercano (KNN), regresiones aumento de gradiente(GBR), y regresiones lineales (LR), así como un regresor de ampliamiento conjunto de un GBR y RF, para modelar emisiones de GEI en diferentes escalas de tiempo de campos de arroz \citep{JIANG2023108821} .
+
+Por otro lado, Sabrina Hempel y Julian Adolph junto con su equipo usaron regresiones GBR, RF y regresiones lineales múltiples, regresiones de cresta bayesiana (BR, por sus siglas en inglés), una red neuronal con una capa oculta así como máquinas de soporte vectorial y procesos gaussianos para evaluar las emisiones de metano de un edificio lechero con ventilación natural \citep{app10196938}.
+
+
+\subsection{Análisis y Resultados}
+
+Para este estudio primero se analizaron diferentes modelos de los encontrados en la literatura para evaluar cuál de ellos era el de mejor desempeño. Se usó el error de raíz cuadrada media (RMSE por sus siglas en inglés) y el error absoluto medio (por sus siglas e inglés, MAE) para compararlos.
+
+Los modelos usados fueron:
+
+\begin{itemize}
+\item Cresta bayesiana (BR)
+\item Aumento de gradiente (GBR)
+\item Regresión Lineal (LR)
+\item Bosques aleatorios (RF)
+\item $K$-vecino más cercano (KNN)
+\item Regresor de ampliamiento conjunto usando GBR y RF
+\end{itemize}
+
+
+Todos se revisaron usando una división de entrenamiento y prueba especializada para series de tiempo encontrada en \textit{scikit-learn} para tres distintos tamaños de prueba. Los mejores cinco resultados fueron los presentados en la tabla \ref{table:mejores20} (p.\pageref{table:mejores20}).
+
+\begin{table}[h] \centering
+\caption{Mejores cinco resultados de pruebas de regresiones por RMSE y MAE}
+\label{table:mejores20}
+\begin{tabular}{lllll}
+\hline
+  & \textbf{Modelo} & \textbf{RMSE} & \textbf{MAE} & \textbf{Tiempo} \\ \hline
+1 & LR  & 0.0105 & 0.0094   & 0.0028          \\
+2 & BR    & 0.0216   & 0.0214        & 0.0026          \\
+3 & RF     & 0.0275     & 0.0274          & 0.2002          \\
+4 & KNN   & 0.0301		& 0.0301      & 0.0022           \\
+5 & Boosting   & 0.0477  & 0.0476     & 0.0598       \\ \hline
+\end{tabular}
+\end{table}
+
+Se realizó también un análisis gráfico que puede observarse en la figura \ref{fig: rmse} (p.\pageref{fig: rmse}) y la figura \ref{fig: r2} (p.\pageref{fig: r2}).
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Imagenes/descarga (11).png}
+\caption{Modelos por RMSE y tiempo de ejecución}
+\label{fig: rmse}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Imagenes/descarga (12).png}
+\caption{Modelos por MAE y tiempo de ejecución}
+\label{fig: r2}
+\end{figure}
+
+Basándonos en los gráficos podemos ver que a pesar de que el mejor modelo es una regresión lineal esta en realidad presenta mucha variabilidad respecto a las métricas obtenidas por lo cual no es ideal como modelo.
+
+Tomando en cuenta ambas métricas y el tiempo de ejecución se decide que el mejor modelo es el de cresta bayesiana.
+
+\clearpagepage
+\newpage
+
+\bibliography{biblio}
+
+\end{document} 
